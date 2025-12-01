@@ -1,0 +1,13 @@
+{
+  "id": "4d7e5f9a-6b2a-4d40-9f13-3a2e6e0f4c9d",
+  "name": "SAFe-Com Local",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "enabled": true
+    }
+  ],
+  "timestamp": 0,
+  "synced": false
+}
