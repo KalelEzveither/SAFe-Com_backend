@@ -73,5 +73,75 @@
       },
       "response": []
     }
+    ,
+    {
+      "name": "Create Barraca - POST /api/barracas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Barraca do João\",\n  \"descricao\": \"Comidas tradicionais\",\n  \"usuarioId\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/barracas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "barracas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Barracas - GET /api/barracas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/barracas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "barracas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Barraca - GET /api/barracas/:id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/barracas/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "barracas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
   ]
 }
