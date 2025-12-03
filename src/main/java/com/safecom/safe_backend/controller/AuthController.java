@@ -19,6 +19,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/register")
     public ResponseEntity<Usuario> register(@RequestBody RegisterRequest req) {
         Usuario u = new Usuario();
@@ -42,5 +43,11 @@ public class AuthController {
                     return ResponseEntity.ok(u);
                 })
                 .orElse(ResponseEntity.status(401).build());
+    }
+
+    @PostMapping("/feirante")
+    public ResponseEntity<Void> registerFeirante(@RequestBody com.safecom.safe_backend.controller.dto.FeiranteRequest req) {
+        authService.registrarFeiranteCompleto(req.usuario, req.barraca);
+        return ResponseEntity.ok().build();
     }
 }

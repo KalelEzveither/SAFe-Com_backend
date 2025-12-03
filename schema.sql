@@ -35,7 +35,7 @@ CREATE TABLE barraca (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT,
-    imagem_url VARCHAR(255),                  -- URL/Caminho da foto da barraca
+    imagem_url TEXT,                -- Foto salva em base64
     horario_funcionamento VARCHAR(50),        -- Ex: "12:00 às 14:00"
     is_aberta BOOLEAN DEFAULT TRUE,           -- Status: Aberto (TRUE) ou Fechado (FALSE)
     usuario_id INT NOT NULL UNIQUE,           -- UNIQUE garante a regra de 1 barraca por vendedor
@@ -67,7 +67,7 @@ CREATE TABLE produto (
     descricao TEXT,
     preco DECIMAL(10, 2) NOT NULL,
     quantidade_estoque INT NOT NULL DEFAULT 0, -- Controle de estoque simples
-    imagem_url VARCHAR(255),
+    imagem_url TEXT, -- base64
     categoria VARCHAR(50),                     -- Categoria específica do produto (opcional)
     barraca_id INT NOT NULL,
     
