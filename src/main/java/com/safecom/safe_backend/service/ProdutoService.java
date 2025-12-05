@@ -36,4 +36,8 @@ public class ProdutoService {
     public boolean delete(long id) {
         return produtoDao.delete(id);
     }
+
+    public List<Produto> listarPorBarraca(long barracaId) {
+        return produtoDao.findByBarracaId(barracaId);
+    }
 }

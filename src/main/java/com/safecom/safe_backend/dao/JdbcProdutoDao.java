@@ -55,15 +55,22 @@ public class JdbcProdutoDao implements ProdutoDao {
 
     @Override
     public Produto create(Produto produto) {
-        String sql = "INSERT INTO produto (nome, descricao, preco, imagem_url, categoria, barraca_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO produto (nome, descricao, preco, imagem_url, categoria, barraca_id, quantidade_estoque) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = connectionFactory.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, produto.getNome());
             ps.setString(2, produto.getDescricao());
             ps.setBigDecimal(3, produto.getPreco());
             ps.setString(4, produto.getImagemUrl());
             ps.setString(5, produto.getCategoria());
-            if (produto.getBarracaId() != null) ps.setLong(6, produto.getBarracaId()); else ps.setNull(6, Types.INTEGER);
+            
+            if (produto.getBarracaId() != null) {
+                ps.setLong(6, produto.getBarracaId());
+            } else {
+                ps.setNull(6, Types.INTEGER);
+            }
+
             ps.setInt(7, produto.getQuantidadeEstoque() != null ? produto.getQuantidadeEstoque() : 0);
+
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) produto.setId(keys.getLong(1));
@@ -76,15 +83,23 @@ public class JdbcProdutoDao implements ProdutoDao {
 
     @Override
     public boolean update(Produto produto) {
-        String sql = "UPDATE produto SET nome = ?, descricao = ?, preco = ?, imagem_url = ?, categoria = ?, barraca_id = ? WHERE id = ?";
+        String sql = "UPDATE produto SET nome = ?, descricao = ?, preco = ?, imagem_url = ?, categoria = ?, barraca_id = ?, quantidade_estoque = ? WHERE id = ?";
         try (Connection conn = connectionFactory.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, produto.getNome());
             ps.setString(2, produto.getDescricao());
             ps.setBigDecimal(3, produto.getPreco());
             ps.setString(4, produto.getImagemUrl());
             ps.setString(5, produto.getCategoria());
-            if (produto.getBarracaId() != null) ps.setLong(6, produto.getBarracaId()); else ps.setNull(6, Types.INTEGER);
-            ps.setLong(7, produto.getId());
+            
+            if (produto.getBarracaId() != null) {
+                ps.setLong(6, produto.getBarracaId());
+            } else {
+                ps.setNull(6, Types.INTEGER);
+            }
+
+            ps.setInt(7, produto.getQuantidadeEstoque() != null ? produto.getQuantidadeEstoque() : 0);
+            
+            ps.setLong(8, produto.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -137,5 +152,29 @@ public class JdbcProdutoDao implements ProdutoDao {
         
         if (!rs.wasNull()) p.setBarracaId(bId);
         return p;
+    }
+
+    @Override
+    public List<Produto> findByBarracaId(long barracaId) {
+        List<Produto> list = new ArrayList<>();
+        // SQL filtrando pela FK barraca_id
+        String sql = "SELECT id, nome, descricao, preco, imagem_url, categoria, quantidade_estoque, barraca_id FROM produto WHERE barraca_id = ?";
+
+        try (Connection conn = connectionFactory.getConnection(); 
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            // Substitui o ? pelo ID da barraca que veio por parâmetro
+            ps.setLong(1, barracaId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Reutiliza seu método mapRow para converter o ResultSet em Objeto
+                    list.add(mapRow(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar produtos da barraca " + barracaId, e);
+        }
+        return list;
     }
 }

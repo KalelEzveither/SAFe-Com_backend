@@ -18,4 +18,6 @@ public interface ProdutoDao {
     boolean delete(long id);
 
     boolean baixarEstoque(long produtoId, int quantidadeComprada);
+
+    List<Produto> findByBarracaId(long barracaId);
 }

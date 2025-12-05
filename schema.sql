@@ -74,6 +74,21 @@ CREATE TABLE produto (
     CONSTRAINT fk_produto_barraca FOREIGN KEY (barraca_id) REFERENCES barraca(id) ON DELETE CASCADE
 );
 
+-- Tabela para guardar os itens do carrinho
+CREATE TABLE carrinho_item (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL DEFAULT 1,
+    
+    -- Garante integridade (se apagar user/produto, limpa o carrinho)
+    CONSTRAINT fk_carrinho_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+    CONSTRAINT fk_carrinho_produto FOREIGN KEY (produto_id) REFERENCES produto(id) ON DELETE CASCADE,
+    
+    -- Evita duplicatas: O mesmo produto não aparece 2 vezes para o mesmo usuário
+    CONSTRAINT uq_carrinho_item UNIQUE (usuario_id, produto_id)
+);
+
 -- Tabela 6: PEDIDO (Cabeçalho da Transação)
 CREATE TABLE pedido (
     id SERIAL PRIMARY KEY,
@@ -82,6 +97,7 @@ CREATE TABLE pedido (
     tipo_entrega VARCHAR(20) DEFAULT 'RETIRADA', -- Valores: RETIRADA, ENTREGA
     valor_total DECIMAL(10, 2) DEFAULT 0.00,
     comprador_id INT NOT NULL,
+    barraca_id INT NOT NULL,
     
     CONSTRAINT fk_pedido_comprador FOREIGN KEY (comprador_id) REFERENCES usuario(id)
 );
@@ -109,7 +125,3 @@ INSERT INTO categoria (nome) VALUES
 ('Temperos'),
 ('Artesanato'),
 ('Salgados');
-
--- Usuário Admin/Teste para facilitar a apresentação
-INSERT INTO usuario (nome, email, senha, cpf_cnpj, telefone, tipo) VALUES 
-('Admin Teste', 'admin@safe.com', '123456', '000.000.000-00', '77999999999', 'CLIENTE');

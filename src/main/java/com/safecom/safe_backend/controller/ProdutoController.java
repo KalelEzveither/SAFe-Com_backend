@@ -45,4 +45,15 @@ public class ProdutoController {
         boolean ok = produtoService.delete(id);
         return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+    
+    @GetMapping("/barraca/{barracaId}")
+    public ResponseEntity<List<Produto>> listarPorBarraca(@PathVariable long barracaId) {
+        // Chama o serviço que chama o DAO JDBC
+        List<Produto> produtos = produtoService.listarPorBarraca(barracaId);
+        
+        if (produtos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(produtos);
+    }
 }
