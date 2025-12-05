@@ -18,7 +18,6 @@ public class JdbcUsuarioDao implements UsuarioDao {
 
     @PostConstruct
     public void init() {
-        // Table likely created externally by teacher; attempt to create safely
         try (Connection conn = connectionFactory.getConnection(); Statement st = conn.createStatement()) {
             st.execute("CREATE TABLE IF NOT EXISTS usuario (id SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, senha VARCHAR(255) NOT NULL, cpf_cnpj VARCHAR(20) UNIQUE NOT NULL, telefone VARCHAR(20), tipo VARCHAR(20) NOT NULL DEFAULT 'CLIENTE')");
         } catch (SQLException e) {

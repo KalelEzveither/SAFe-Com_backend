@@ -45,4 +45,11 @@ public class BarracaController {
         boolean ok = barracaService.delete(id);
         return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+    
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Barraca> getByUsuarioId(@PathVariable Long usuarioId) {
+        return barracaService.getByUserId(usuarioId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
