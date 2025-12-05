@@ -27,6 +27,7 @@ public class CarrinhoController {
     // Body: { "usuarioId": 1, "produtoId": 5, "quantidade": 2 }
     @PostMapping
     public ResponseEntity<?> adicionar(@RequestBody ItemCarrinho item) {
+        
         String resultado = carrinhoDao.adicionarItem(item.getUsuarioId(), item.getProdutoId(), item.getQuantidade());
         
         if ("ERRO_BARRACA_DIFERENTE".equals(resultado)) {

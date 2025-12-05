@@ -44,4 +44,8 @@ public class BarracaService {
     public boolean delete(long id) {
         return barracaDao.delete(id);
     }
+
+    public Optional<Barraca> getByUserId(long id) {
+        return barracaDao.findByUsuarioId(id);
+    }
 }
